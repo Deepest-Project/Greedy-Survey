@@ -1,2 +1,3 @@
 # Greedy-Survey
-We the newbies of Season 5 Deepest seek to delve into the vast domain of and acquire the fundamental skills in Deep Learning. 
+
+Refer to the [Wiki front page](https://github.com/Deepest-Project/Greedy-Survey/wiki) for details on this study.
