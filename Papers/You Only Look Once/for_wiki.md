@@ -4,75 +4,65 @@
 
 # Abstract
 기존 Object detection 구조의 한계:
-> Prior work on object detection repurposes classifiers to perform detection.
->
-> Prior works are not **real-time object detection**.
+> Prior work on object detection **repurposes classifiers** to perform detection.<br />
+> Prior works are **not real-time object detection**.
 
-논문에서 제시하는 해결 방법:
-> Instead, we frame object detection as **regression problem** to spatially separated bounding boxes and associated class probabilities.
->
-> A single neural network predicts bounding boxes and class probabilities directly from full images in one evaluation..
+**논문에서 제시하는 해결 방법:**
+> Instead, we frame object detection as **regression problem** to spatially separated bounding boxes and associated class probabilities.<br />
+> **A single neural network** predicts **bounding boxes** and **class probabilities** directly from full images in one evaluation..
 
 # Introduction
-기존 시스템의 방법론과 단점:
+**기존 시스템의 방법론과 단점:**
 > Curnent detection sytems repurpose classifiers perform dectection.
->
-> To detect an object...,
+
+> To detect an object...
 
 > 1) propose region of interest by using region proposal network.
->
 > 2) run classifier on these proposed boxes.
->
 > 3) refine the bounding box, eliminate duplicate detections, and rescore the box based on other objects in the scene.
 >
 > These complex pipelines are **slow and hard to optimize** because each individual componet must be trained separately.(R-CNN)
 >
 > \* Fast R-CNN, Faster R-CNN은 첨부자료 참고.
 
-YOLO의 차별성
-> We reframe object detection as a single regression problem, straght from image pixels to bounding box coordinates and class probabilities.
->
-> ... simultaneously predicts multiple bounding boxex and class probabilities .......
->
+**YOLO의 차별성**
+> We reframe object detection as a single regression problem, **straght from image pixels** to **bounding box coordinates and class probabilities.**<br />
+> ... simultaneously predicts multiple bounding boxex and class probabilities .......<br />
 > ... trains full images and directly optimizes detection performance. 
 
-이로 인한 장점 세가지.
+**이로 인한 장점 세가지.**
+> **First,** YOLO is extremly fast.<br />
+> Base network runs at 45 fps and Fast version runs at more than 150 fps.
 
-> First, YOLO is extremly fast.
->
-> * Base network runs at 45 fps and Fast version runs at more than 150 fps.
+> **Second,** YOLO reasons globally about the image when making predictions.<br />
+> ... sees the entire image during training and test time so it encodes **contextual information** about classes as well as **their appearance.**
 
-> Second, YOLO reasons globally about the image when making predictions.
->
-> ... sees the entire image during training and test time so it encodes **contextual information** about classes as well as their appearance.
+> **Third,** YOLO learns **genealizable representations** of objects.
 
-> Third, YOLO learns **genealizable representations** of objects.
-...
 
 # Detail
 ### Unified Detection
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG?raw=true" width="50%" height="50%">
 
-> ... divides the input image in to S x S grid.
-> if center of an object falls into a grid cell, that grid cell is respensible for detecting that object. 
+> ... divides the input image in to S x S grid.<br />
+> if center of an object falls into a grid cell, that grid cell is respensible for detecting that object. <br />
 > Each grid cell predicts B bounding boxes and confidence score for those boxes.
 
 ##### Confidence: 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="50%" height="50%">
 
 ##### bounding boxes
+> Each bounding box consists of **5 predictions: x, y, w, h, and confidence.**
 
-> Each bounding  box consists of 5 predictions: x, y, w, h, and confidence.
-> Each grid cell also predicts C conditional class probabilites.
-
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%">
+##### conditional class probabilities
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
+> Each grid cell also predicts **C** conditional class probabilites.
 
 > the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 
 #### Design
-
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="50%" height="50%">
 
 > **GoogleLeNet** + 2 fully connected layers
@@ -118,7 +108,6 @@ YOLO의 차별성
 > Assign one predictor to be "respensible" for prediction an object based on which prediction has the highest current IOU with the ground truth. 
 
 #### loss fuction
-
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="50%" height="50%">
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="3%" height="3%"> if object appears in cell i
@@ -131,8 +120,15 @@ YOLO의 차별성
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/errorAnalysis.PNG?raw=true" width="50%" height="50%">
 
+* Correct: correct class and IOU> .5
+* Localization: correct class, .1 < IOU < .5
+* Similar: class is similar, IOU > .1
+* Other: class is wrong, IOU > .1
+* Background: IOU < .1 for any object
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/generalization.PNG?raw=true" width="50%" height="50%">
 
+### 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/qualitativeResults.PNG?raw=true" width="50%" height="50%">
 
 # Discussion
