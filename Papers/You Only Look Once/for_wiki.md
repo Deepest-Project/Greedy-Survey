@@ -52,7 +52,7 @@ YOLO의 차별성
 # Detail
 ### Unified Detection
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG" width="50%" height="50%>
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG?raw=true" width="50%" height="50%">
 
 > ... divides the input image in to S x S grid.
 > if center of an object falls into a grid cell, that grid cell is respensible for detecting that object. 
