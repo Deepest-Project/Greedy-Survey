@@ -52,10 +52,10 @@
 #### Confidence: 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="20%" height="20%">
 
-#### bounding boxes
+#### bounding boxes:
 * Each bounding box consists of **5 predictions: x, y, w, h, and confidence.**
 
-#### conditional class probabilities
+#### conditional class probabilities:
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
 * Each grid cell also predicts **C** conditional class probabilites.
 
@@ -99,7 +99,7 @@
 >
 > Assign one predictor to be "respensible" for prediction an object based on which prediction has the highest current IOU with the ground truth. 
 
-#### loss fuction
+#### loss fuction:
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="50%" height="50%">
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="3%" height="3%"> if object appears in cell i
