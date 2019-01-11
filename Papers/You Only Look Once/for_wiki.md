@@ -13,12 +13,12 @@
 
 # Introduction
 ## 기존 시스템의 방법론과 단점:
-> Curnent detection sytems repurpose classifiers perform dectection.
+> Curnent detection sytems **repurpose classifiers** perform dectection.
 >
-> To detect an object...
+> **To detect an object...**
 >
-> 1) propose region of interest by using region proposal network.
-> 2) run classifier on these proposed boxes.
+> 1) propose region of interest by using **region proposal network.**
+> 2) **run classifier** on these proposed boxes.
 > 3) refine the bounding box, eliminate duplicate detections, and rescore the box based on other objects in the scene.
 >
 > These complex pipelines are **slow and hard to optimize** because each individual componet must be trained separately.(R-CNN)
@@ -27,14 +27,14 @@
 
 ## YOLO의 차별성
 > We reframe object detection as a single regression problem, **straght from image pixels** to **bounding box coordinates and class probabilities.**<br />
-> ... simultaneously predicts multiple bounding boxex and class probabilities .......<br />
-> ... trains full images and directly optimizes detection performance. 
+> ... **simultaneously** predicts multiple bounding boxex and class probabilities .......<br />
+> ... trains **full images** and **directly optimizes** detection performance. 
 
 ## 이로 인한 장점 세가지
-> **First,** YOLO is extremly fast.<br />
+> **First,** YOLO is extremly **fast.**<br />
 > Base network runs at 45 fps and Fast version runs at more than 150 fps.
 
-> **Second,** YOLO reasons globally about the image when making predictions.<br />
+> **Second,** YOLO **reasons globally** about the image when making predictions.<br />
 > ... sees the entire image during training and test time so it encodes **contextual information** about classes as well as **their appearance.**
 
 > **Third,** YOLO learns **genealizable representations** of objects.
@@ -45,9 +45,9 @@
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG?raw=true" width="50%" height="50%">
 
-* ... divides the input image in to S x S grid.<br />
-* if center of an object falls into a grid cell, that grid cell is respensible for detecting that object. <br />
-* Each grid cell predicts B bounding boxes and confidence score for those boxes.
+* ... **divides** the input image in to **S x S grid.**<br />
+* if **center of an object falls into a grid cell**, that grid cell is **respensible for** detecting that object. <br />
+* Each grid cell predicts **B bounding boxes** and **confidence score** for those boxes.
 
 #### Confidence: 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="20%" height="20%">
@@ -57,9 +57,9 @@
 
 #### conditional class probabilities:
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
-* Each grid cell also predicts **C** conditional class probabilites.
+* Each grid cell also predicts **C conditional class probabilites**.
 
-* the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
+the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 
 ### Design
@@ -110,6 +110,7 @@
 
 자세한 설명은 논문으로 대체하겠습니다.
 
+### VoC 2007 Error Analysis
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/errorAnalysis.PNG?raw=true" width="50%" height="50%">
 
 * Correct: correct class and IOU> .5
@@ -118,9 +119,13 @@
 * Other: class is wrong, IOU > .1
 * Background: IOU < .1 for any object
 
+### Generalization results on Picasso and People-Art
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/generalization.PNG?raw=true" width="50%" height="50%">
 
-### 
+* Artwork and natural images are very different on a pixel level but they are similar in terms of the size and shape of objects, thus YOLO can still predict good bounding boxes and detections.
+
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/qualitativeResults.PNG?raw=true" width="50%" height="50%">
 
 # Discussion
