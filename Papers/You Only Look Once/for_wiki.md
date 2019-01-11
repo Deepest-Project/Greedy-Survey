@@ -68,12 +68,34 @@ YOLO의 차별성
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true">
 
+> the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 
-#architecture
-![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true)
+#### Design
 
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="50%" height="50%">
 
+> **GoogleLeNet** + 2 fully connected layers
+
+> replace inception modules with **1 x 1 reduction layers** followed by 3 x 3 convolutional layers. 
+
+#### Training
+
+> **pretrain first 20 convolutional layers** on the ImageNet 1000-class competetion dataset.
+
+> achieve a single crop top-5 accuracy of 88% on the ImageNet 2012 validation set.
+
+> add **four convolutional layers** and **two fully connected layers** with randomly initialized weights.
+
+> increase the input resolution of the network from 224 x 224 to 448 x 448.
+
+> normalize the bounding box width and height by the image width and height so that they  fall between 0 and 1.
+
+> parametrize the bounding box x and y coordinates to be offsets of a particular grid cell location so they are also bounded between 0 and 1.
+
+##### leaky rectified linear activation:
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="50%" height="50%">
 
 #coord
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/coord.PNG?raw=true)
