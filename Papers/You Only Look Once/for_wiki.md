@@ -98,16 +98,31 @@ YOLO의 차별성
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="50%" height="50%">
 
 > optimize for **sum-squared error**. It weights **localization error equally with classification error** which may not be ideal.
-
+?
 > many gird cells do not contain any object. -> pushing the "confidence" scores of these cells
 >
 > -> **overpowering the gradient** form cells that do contain object.
 
-##### lamba coord, noobj
+##### to remedy this issue, they set Lamda coord, noobj
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/coord.PNG?raw=true" width="20%" height="10%"> = 5.0
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj.PNG?raw=true" width="20%" height="10%"> = 0.5
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/coord.PNG?raw=true" width="5%" height="5%"> = 5.0
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj.PNG?raw=true" width="5%" height="5%"> = 0.5
 
+> Sum-squared error also **equally weights errors in large boxes and small boxes**.
+>
+> To partially address this we predict **the square root of the bounding box width and height** instead of the width and height directly
+>
+
+> At the trainin time we only want one bounding box predictor to be responsible for predicting an object based on which prediction has **the highest current IOU** with the ground truth.
+>
+> Assign one predictor to be "respensible" for prediction an object based on which prediction has the highest current IOU with the ground truth. 
+
+#### loss fuction
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="50%" height="50%">
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="5%" height="5%"> = 5.0
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="5%" height="5%"> = 0.5
 
 #errorAnalysis
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/errorAnalysis.PNG?raw=true)
@@ -115,17 +130,11 @@ YOLO의 차별성
 #generalization
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/generalization.PNG?raw=true)
 
-#loss
-![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true)
 
 #noobj
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj.PNG?raw=true)
 
-#obj_i
-![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true)
 
-#obj_ij
-![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true)
 
 #qualitativeResults
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/qualitativeResults.PNG?raw=true)
