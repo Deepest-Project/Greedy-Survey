@@ -121,11 +121,9 @@ YOLO의 차별성
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="50%" height="50%">
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="3%" height="3%">
-> if object appears in cell i
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="3%" height="3%"> if object appears in cell i
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="3%" height="3%"> = 0.5
-> jth bounding box predictor in cell i is "responsible for that prediction.
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="3%" height="3%"> jth bounding box predictor in cell i is "responsible for that prediction.
 
 # Experiments and Results
 
