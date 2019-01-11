@@ -79,7 +79,7 @@ the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 #### leaky rectified linear activation:
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="50%" height="50%">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="40%" height="40%">
 
 * optimize for **sum-squared error**. It weights **localization error equally with classification error** which may not be ideal.
 * many gird cells do not contain any object. -> pushing the "confidence" scores of these cells <br />
@@ -100,11 +100,11 @@ the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 > Assign one predictor to be "respensible" for prediction an object based on which prediction has the highest current IOU with the ground truth. 
 
 #### loss fuction:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="50%" height="50%">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="70%" height="70%">
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="3%" height="3%"> if object appears in cell i
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="5%" height="5%"> : if object appears in cell i
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="3%" height="3%"> jth bounding box predictor in cell i is "responsible for that prediction.
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i is "responsible for that prediction.
 
 # Experiments and Results
 
