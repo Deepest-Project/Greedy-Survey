@@ -23,7 +23,7 @@
 >
 > These complex pipelines are **slow and hard to optimize** because each individual componet must be trained separately.(R-CNN)
 >
-> \* Fast R-CNN, Faster R-CNN은 첨부자료 참고.
+> \* Fast R-CNN, Faster R-CNN은 첨부자료 참고. [5 minutes summary: R-CNN, Fast R-CNN, Faster R-CNN](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/5_minutes_R_CNN.pdf?raw=true)
 
 ## YOLO의 차별성
 > We reframe object detection as a single regression problem, **straght from image pixels** to **bounding box coordinates and class probabilities.**<br />
