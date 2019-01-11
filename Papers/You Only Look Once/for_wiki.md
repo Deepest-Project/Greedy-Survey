@@ -38,7 +38,7 @@ YOLO의 차별성
 
 이로 인한 장점 세가지.
 
-> First, YPLP is extremly fast.
+> First, YOLO is extremly fast.
 
 > * Base network runs at 45 fps and Fast version runs at more than 150 fps.
 
@@ -59,14 +59,14 @@ YOLO의 차별성
 > Each grid cell predicts B bounding boxes and confidence score for those boxes.
 
 ##### Confidence: 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="50%" height="50%">
 
 ##### bounding boxes
 
 > Each bounding  box consists of 5 predictions: x, y, w, h, and confidence.
 > Each grid cell also predicts C conditional class probabilites.
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%">
 
 > the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
@@ -76,29 +76,38 @@ YOLO의 차별성
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="50%" height="50%">
 
 > **GoogleLeNet** + 2 fully connected layers
-
+>
 > replace inception modules with **1 x 1 reduction layers** followed by 3 x 3 convolutional layers. 
 
 #### Training
 
 > **pretrain first 20 convolutional layers** on the ImageNet 1000-class competetion dataset.
-
+>
 > achieve a single crop top-5 accuracy of 88% on the ImageNet 2012 validation set.
-
+>
 > add **four convolutional layers** and **two fully connected layers** with randomly initialized weights.
-
+>
 > increase the input resolution of the network from 224 x 224 to 448 x 448.
-
+>
 > normalize the bounding box width and height by the image width and height so that they  fall between 0 and 1.
-
+>
 > parametrize the bounding box x and y coordinates to be offsets of a particular grid cell location so they are also bounded between 0 and 1.
 
 ##### leaky rectified linear activation:
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="50%" height="50%">
 
-#coord
-![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/coord.PNG?raw=true)
+> optimize for **sum-squared error**. It weights **localization error equally with classification error** which may not be ideal.
+
+> many gird cells do not contain any object. -> pushing the "confidence" scores of these cells
+>
+> -> **overpowering the gradient** form cells that do contain object.
+
+##### lamba coord, noobj
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/coord.PNG?raw=true" width="20%" height="10%"> = 5.0
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj.PNG?raw=true" width="20%" height="10%"> = 0.5
+
 
 #errorAnalysis
 ![](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/errorAnalysis.PNG?raw=true)
