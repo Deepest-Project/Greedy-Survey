@@ -136,4 +136,4 @@ YOLO의 차별성
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/qualitativeResults.PNG?raw=true" width="50%" height="50%">
 
 # Discussion
-YOLO의 다음 버젼들을 모르는 상태에서 성능 개선 방안을 생각해본다면?
+YOLO의 다음 버젼들을 모르는 상태에서 성능개선 방안을 생각해본다면?
