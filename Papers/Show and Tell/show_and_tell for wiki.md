@@ -1,55 +1,56 @@
 # Resources
-* [arXiv](https://arxiv.org/abs/1506.02640)
-* [Youtube, TensorFlow KR 논문읽기 모임](https://www.youtube.com/watch?v=eTDcoeqj1_w&t=396s&list=PLlMkM4tgfjnJhhd4wn5aj8fVTYJwIpWkS&index=18)
+* [arXiv](https://arxiv.org/abs/1411.4555)
+* [Youtube, TensorFlow KR 논문읽기 모임](https://www.youtube.com/watch?v=BrmCnoYhQb4&t=0s&index=42&list=PL0oFI08O71gKjGhaWctTPvvM7_cVzsAtK)
 
 # Abstract
-**기존 Object detection 구조의 한계:**
-* Prior work on object detection **repurposes classifiers** to perform detection.<br />
-* Prior works are **not real-time object detection**.
 
-**논문에서 제시하는 해결 방법:**
-* Instead, we frame object detection as **regression problem** to spatially separated bounding boxes and associated class probabilities.<br />
-* **A single neural network** predicts **bounding boxes** and **class probabilities** directly from full images in one evaluation..
+* describing the content of an image is a fundamental problem in artificial intelligence that **connects computer vision and natural language processing**.
+* a generaive model based on a **deep recurrent architecture** that ... to generate natural sentences describing an image.
 
 # Introduction
-## 기존 시스템의 방법론과 단점:
-> Curnent detection sytems **repurpose classifiers** perform dectection.
->
-> **To detect an object...**
->
-> 1) propose region of interest by using **region proposal network.**
-> 2) **run classifier** on these proposed boxes.
-> 3) refine the bounding box, eliminate duplicate detections, and rescore the box based on other objects in the scene.
->
-> These complex pipelines are **slow and hard to optimize** because each individual componet must be trained separately.(R-CNN)
->
-> \* Fast R-CNN, Faster R-CNN은 첨부자료 참고. [5 minutes summary: R-CNN, Fast R-CNN, Faster R-CNN](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/5_minutes_R_CNN.pdf)
 
-## YOLO의 차별성
-> We reframe object detection as a single regression problem, **straight from image pixels** to **bounding box coordinates and class probabilities.**<br />
-> ... **simultaneously** predicts multiple bounding boxex and class probabilities .......<br />
-> ... trains **full images** and **directly optimizes** detection performance. 
+* a description must **capture** not only **the objects** contained in an image, but it also must express **how these objects relate >to each other** as well as their **attributes and the activities** they are involved in.
+* To express the above semantic knowledge, **a language model** is needed in addition to visual understanding.
 
-## 이로 인한 장점 세가지
-> **First,** YOLO is extremly **fast.**<br />
-> Base network runs at 45 fps and Fast version runs at more than 150 fps.
+* a single joint model that takes an image I as input, and is trained to maximize the likelihood p(S|I) of producing a target sequence of words
 
-> **Second,** YOLO **reasons globally** about the image when making predictions.<br />
-> ... sees the entire image during training and test time so it encodes **contextual information** about classes as well as **their appearance.**
+CS231n 캡처하기
+* An “encoder” RNN reads the source sentence and transforms it into a rich fixed-length vector representation, which in turn in used as the initial hidden state of a “decoder” RNN that generates the target sentence.
 
-> **Third,** YOLO learns **genealizable representations** of objects.
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG?raw=true" width="50%" height="50%"> <br />
 
+* replacing the encoder RNN by a deep convolution neural network(CNN). CNNs can produce a rich representation of the input images by embedding it to a fixed-length vector which can be used by another tasks.
+* use last hidden layer as an input to the RNN decoder that generates sentences.
+* We call this model the Neural Image Capion, or NIC.
 
-# Detail
-## Unified Detection
+### Contributions:
+1) end-to-end system for the problem.
+2) combines state-of-art sub-networks for vision and language models.
+3) yields significantly better performance compared to state-of-the-art approaches
+  \* Pascal dataset(BLEU score): 25 to 59 (human performance is 69), Flickr30k: 56 to 66, SBU: 19 to 28)
+  
+  
+# Related Work
+1) Mainly for video. systems composed of visual primitive recognizers combine with structured formal language.
+    \- heavily hand-designed, relatively brittle and have been demonstrated only limited domain.
+2) Systems dealing with image description were made after some advances in recognition of objects.
+    \- These are also limited in their expressivity.
+3) The idea of co-embedding of images and text in the same vector space. Descriptions are retrieved which lie close to the image in the embedding space.
+    \- do not attempt to generate novel descriptions.
+* the above approaches cannot describe previously unseen compositions of objects, even though the individual objects might have been observed in the training data.
+4) Simillar recurrent NN for was introduced.  These networks use sentences as RNN input whereas Show and Tell use the visual input to the RNN model directly.
+* As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/grid.PNG?raw=true" width="50%" height="50%">
+# Model
 
-* ... **divides** the input image in to **S x S grid.**<br />
-* if **center of an object falls into a grid cell**, that grid cell is **respensible for** detecting that object. <br />
-* Each grid cell predicts **B bounding boxes** and **confidence score** for those boxes.
+> Machine translation models make use of a recurrent neural network which encodes the variable length input into a fixed dimensional vector, and uses this representation to “decode” it to the desired output sentence. <br />
+> Thus, it is natural to use the same approach where, given an image (instead of an input sentence in the source language), one applies the same principle of “translating” it into its description.
 
-#### confidence: 
+\Theta : parameters of our model
+*I* : image
+*S* : correct transcription (unbounded length)
+
+ #### confidence: 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="20%" height="20%">
 
 #### bounding boxes:
