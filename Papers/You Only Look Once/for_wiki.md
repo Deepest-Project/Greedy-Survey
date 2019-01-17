@@ -26,7 +26,7 @@
 > \* Fast R-CNN, Faster R-CNN은 첨부자료 참고. [5 minutes summary: R-CNN, Fast R-CNN, Faster R-CNN](https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/5_minutes_R_CNN.pdf)
 
 ## YOLO의 차별성
-> We reframe object detection as a single regression problem, **straght from image pixels** to **bounding box coordinates and class probabilities.**<br />
+> We reframe object detection as a single regression problem, **straight from image pixels** to **bounding box coordinates and class probabilities.**<br />
 > ... **simultaneously** predicts multiple bounding boxex and class probabilities .......<br />
 > ... trains **full images** and **directly optimizes** detection performance. 
 
@@ -49,21 +49,25 @@
 * if **center of an object falls into a grid cell**, that grid cell is **respensible for** detecting that object. <br />
 * Each grid cell predicts **B bounding boxes** and **confidence score** for those boxes.
 
-#### Confidence: 
+#### confidence: 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="20%" height="20%">
 
 #### bounding boxes:
 * Each bounding box consists of **5 predictions: x, y, w, h, and confidence.**
 
 #### conditional class probabilities:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/conditional-class-probability.PNG?raw=true" width="20%" height="20%"><br />
 * Each grid cell also predicts **C conditional class probabilites**.
+
+#### class-specific confidence score:
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
+* At test time we **multiply** the conditional class probabilities and the individual box confidence predictions.
 
 the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 
 ### Design
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="50%" height="50%">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="80%" height="80%">
 
 * **GoogleLeNet** + 2 fully connected layers
 * replace inception modules with **1 x 1 reduction layers** followed by 3 x 3 convolutional layers. 
@@ -81,6 +85,14 @@ the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="40%" height="40%">
 
+#### loss function:
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="100%" height="100%">
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="5%" height="5%"> : if object appears in cell i
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i is "responsible" for that prediction.
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i with no object.
 * optimize for **sum-squared error**. It weights **localization error equally with classification error** which may not be ideal.
 * many gird cells do not contain any object. -> pushing the "confidence" scores of these cells <br />
 -> **overpowering the gradient** form cells that do contain object.
@@ -95,16 +107,18 @@ the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 > To partially address this we predict **the square root of the bounding box width and height** instead of the width and height directly
 >
 
-> At the trainin time we only want one bounding box predictor to be responsible for predicting an object based on which prediction has **the highest current IOU** with the ground truth.
+> At the training time we only want one bounding box predictor to be responsible for predicting an object based on which prediction has **the highest current IOU** with the ground truth.
 >
-> Assign one predictor to be "respensible" for prediction an object based on which prediction has the highest current IOU with the ground truth. 
+> Assign one predictor to be "responsible" for prediction an object based on which prediction has the highest current IOU with the ground truth. <br />
+>\* non-maximal suppression adds 2-3% in mAP.[detail](https://docs.google.com/presentation/d/1aeRvtKG21KHdD5lg6Hgyhx5rPq_ZOsGjG5rJ1HP7BbA/pub?start=false&loop=false&delayms=3000&slide=id.g137784ab86_4_1318)
 
-#### loss fuction:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="70%" height="70%">
+### Limiations of YOLO
+* YOLO imposes spatial constrains on bounding box predictions since each gird cell only predicts two boxes and can only have on class.<br />
+This spatial constrain **limits the number of nearby objects** that our model can predict.
+* Since our model learns to predict bounding boxes from data, it struggles to generalize to objects in new or unusual aspect ratios or configurations. <br />
+Our model also uses relatively coarse features for predicting bounding boxes since our architecture has multiple downsampling layers from the input image.
+* Our function treats errors the same in small bounding boxes versus large bounding boxes. (they think it' not enough to predict the square root of the bounding box width and height instead of the width and height directly.
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="5%" height="5%"> : if object appears in cell i
-
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i is "responsible for that prediction.
 
 # Experiments and Results
 
