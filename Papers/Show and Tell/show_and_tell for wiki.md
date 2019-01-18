@@ -88,7 +88,7 @@ NIC에서는 LSTM을 사용하였다. images의 representation을 위해서 CNN�
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/8.PNG?raw=true" width="50%" height="50%"><b />
 
-Our loss is **the sum of the negative log likelihood** of the correct word at each step **all the parameters of the LSTM, the top layer of the image embedder CNN and word embeddings W<sub>e</sub>**
+Our loss is **the sum of the negative log likelihood** of the correct word at each step **all the parameters of the LSTM, the top layer of the image embedder CNN and word embeddings W**<sub>e</sub>
 
 #### Inference
 
