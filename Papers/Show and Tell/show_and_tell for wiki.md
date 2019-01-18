@@ -38,9 +38,9 @@
     \- These are also limited in their expressivity.
 3) The idea of co-embedding of images and text in the same vector space. Descriptions are retrieved which lie close to the image in the embedding space.
     \- do not attempt to generate novel descriptions.
-* the above approaches cannot describe previously unseen compositions of objects, even though the individual objects might have been observed in the training data.
+  * the above approaches cannot describe previously unseen compositions of objects, even though the individual objects might have been observed in the training data.
 4) Simillar recurrent NN for was introduced.  These networks use sentences as RNN input whereas Show and Tell use the visual input to the RNN model directly.
-* As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
+  * As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
 
 # Model
 
@@ -63,23 +63,37 @@ _S_ : correct transcription (unbounded length)
 RNN은 위와 같은 구조를 가지고 있기 때문에 (2)와 같은 상황을 다루기에 적합한 모델이다.
 NIC에서는 LSTM을 사용하였다. images의 representation을 위해서 CNN을 사용하였다. 그리고 단어들은 임베딩 모델로 represent 되었다.
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/5.PNG?raw=true" width="50%" height="50%">
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/6.PNG?raw=true" width="50%" height="50%">
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/7.PNG?raw=true" width="50%" height="50%">
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/8.PNG?raw=true" width="50%" height="50%">
+
 
 ### LSTM-based Sentence Generator
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/4.PNG?raw=true" width="50%" height="50%">
-
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/5.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/LSTM_cs231n.PNG?raw=true" width="50%" height="50%">
 
 \* LSTM에 대한 구체적인 설명은 cs231n 링크로 대체하겠습니다. <br />[Stanford University CS231n, Spring 2017, Lecture 10 | Recurrent Neural Networks](https://youtu.be/6niqTuYFZLQ?t=3347)
 
 #### Training
-* The LSTM model is trained to predict each word of the sentence after it has seen the image as well as all preceding words as defined by p(S<sub>t|I, S<sub>0, ..., S<sub>t-1.
+* The LSTM model is **trained to predict each word of the sentence** after it has **seen the image as well as all preceding words** as defined by **p(S<sub>t</sub>|I, S<sub>0</sub> , ..., S<sub>t-1</sub>)**.
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/6.PNG?raw=true" width="50%" height="50%">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/7.PNG?raw=true" width="50%" height="50%">
 
+* 위 그림과 함께 LSTM에 과정에 대한 기본적인 설명이 나옵니다.
+* 각각의 단어를 Dictionary 사이즈와 같은 차원의 one-hot vecotr S<sub>t</sub>로 represent 했습니다.
+* S<sub>0</sub>는 start word 이고, S<sub>N</sub>은 stop word입니다.
+* We empirically verified that feeding the image at each time step as an extra input yields inferior results, as the network can explicitly exploit noise in the image and overfits more easily.
 
+**Loss:**
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/8.PNG?raw=true" width="50%" height="50%"><b />
+
+Our loss is **the sum of the negative log likelihood** of the correct word at each step **all the parameters of the LSTM, the top layer of the image embedder CNN and word embeddings W<sub>e</sub>**
+
+#### Inference
+
+>주어진 이미지로부터 문장을 생성하는 것에는 많은 방법이 있다고 합니다.<br />
+> **Sampling:** we just sample **the first word according to p1**, then provide the corresponding embedding **as input** and sample p2, **continuing like this** until we sample the special end-of-sentence token or some maximum length. <br />
+> **BeamSearch:** iteratively consider the set of the k best sentences up to time t as candidates to generate sentences of size t + 1, and keep only the resulting best k of them.
 #### conditional class probabilities:
 
 
