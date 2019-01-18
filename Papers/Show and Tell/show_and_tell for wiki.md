@@ -44,26 +44,38 @@
 
 # Model
 
-> Machine translation models make use of a recurrent neural network which encodes the variable length input into a fixed dimensional vector, and uses this representation to “decode” it to the desired output sentence. <br />
-> Thus, it is natural to use the same approach where, given an image (instead of an input sentence in the source language), one applies the same principle of “translating” it into its description.
+> Machine translation models make use of a recurrent neural network which **encodes the variable length input** into a fixed dimensional vector, and uses this representation to **“decode” it to the desired output sentence.** <br />
+> Thus, it is natural to use the same approach where, given **an image** (instead of an input sentence in the source language), one applies the same principle of “translating” it into its description.
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/1.PNG?raw=true" width="50%" height="50%">
+<br />
 
-$$\theta$$ : parameters of our model
-*I* : image
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/theta.PNG?raw=true" width="5%" height="5%">
+: parameters of our model <br />
+*I* : image <br />
 *S* : correct transcription (unbounded length)
 
-
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/2.PNG?raw=true" width="50%" height="50%">
+
+* It is common to apply the chain rule to model the joint probability over S_0, ... S_N, where N is the length of this particular example.
+* we **optimize the sum of the log probabilities as described in (2)** over the whole training set using **stochastic gradient descent.**
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/3.PNG?raw=true" width="50%" height="50%">
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/4.PNG?raw=true" width="50%" height="50%">
+RNN은 위와 같은 구조를 가지고 있기 때문에 (2)와 같은 상황을 다루기에 적합한 모델이다.
+NIC에서는 LSTM을 사용하였다. images의 representation을 위해서 CNN을 사용하였다. 그리고 단어들은 임베딩 모델로 represent 되었다.
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/5.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/6.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/7.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/8.PNG?raw=true" width="50%" height="50%">
 
- #### confidence: 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/confidence.PNG?raw=true" width="20%" height="20%">
+### LSTM-based Sentence Generator
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/4.PNG?raw=true" width="50%" height="50%">
+
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/LSTM_cs231n.PNG?raw=true" width="50%" height="50%">
+
+
 
 #### bounding boxes:
 * Each bounding box consists of **5 predictions: x, y, w, h, and confidence.**
