@@ -50,10 +50,9 @@
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/1.PNG?raw=true" width="50%" height="50%">
 <br />
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/theta.PNG?raw=true" width="5%" height="5%">
-: parameters of our model <br />
-*I* : image <br />
-*S* : correct transcription (unbounded length)
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/theta.PNG?raw=true" width="1%" height="1%"> : parameters of our model  
+_I_ : image  
+_S_ : correct transcription (unbounded length)
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/2.PNG?raw=true" width="50%" height="50%">
 
@@ -75,20 +74,17 @@ NIC에서는 LSTM을 사용하였다. images의 representation을 위해서 CNN�
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/LSTM_cs231n.PNG?raw=true" width="50%" height="50%">
 
+\* LSTM에 대한 구체적인 설명은 cs231n 링크로 대체하겠습니다. <br />[Stanford University CS231n, Spring 2017, Lecture 10 | Recurrent Neural Networks](https://youtu.be/6niqTuYFZLQ?t=3347)
 
+#### Training
+* The LSTM model is trained to predict each word of the sentence after it has seen the image as well as all preceding words as defined by p(S<sub>t|I, S<sub>0, ..., S<sub>t-1.
 
-#### bounding boxes:
-* Each bounding box consists of **5 predictions: x, y, w, h, and confidence.**
 
 #### conditional class probabilities:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/conditional-class-probability.PNG?raw=true" width="20%" height="20%"><br />
-* Each grid cell also predicts **C conditional class probabilites**.
+
 
 #### class-specific confidence score:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/class-specific-confidence-scores.PNG?raw=true" width="50%" height="50%"><br />
-* At test time we **multiply** the conditional class probabilities and the individual box confidence predictions.
 
-the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/9.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/10.PNG?raw=true" width="50%" height="50%">
@@ -97,49 +93,16 @@ the predictions are encoded as an **S x S x (B * 5 + C) tensor.**
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/13.PNG?raw=true" width="50%" height="50%">
 
 ### Design
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/architecture.PNG?raw=true" width="80%" height="80%">
 
-* **GoogleLeNet** + 2 fully connected layers
-* replace inception modules with **1 x 1 reduction layers** followed by 3 x 3 convolutional layers. 
 
 ### Training
 
-* **pretrain first 20 convolutional layers** on the ImageNet 1000-class competetion dataset.
-* achieve a single crop top-5 accuracy of 88% on the ImageNet 2012 validation set.
-* add **four convolutional layers** and **two fully connected layers** with randomly initialized weights.
-* increase the input **resolution** of the network from 224 x 224 to 448 x 448.
-* **normalize** the bounding **box width and height** by the image width and height so that they fall between 0 and 1.
-* parametrize the bounding box x and y coordinates to be offsets of a particular grid cell location so they are also bounded between 0 and 1.
-
 #### leaky rectified linear activation:
 
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/activation.PNG?raw=true" width="40%" height="40%">
-
 #### loss function:
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/loss.PNG?raw=true" width="100%" height="100%">
-
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_i.PNG?raw=true" width="5%" height="5%"> : if object appears in cell i
-
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/obj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i is "responsible" for that prediction.
-
-<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/You%20Only%20Look%20Once/noobj_ij.PNG?raw=true" width="5%" height="5%"> : jth bounding box predictor in cell i with no object.
-* optimize for **sum-squared error**. It weights **localization error equally with classification error** which may not be ideal.
-* many gird cells do not contain any object. -> pushing the "confidence" scores of these cells <br />
--> **overpowering the gradient** form cells that do contain object.
 
 #### to remedy this issue, they set Lamda coord, noobj
 
-
-
-> Sum-squared error also **equally weights errors in large boxes and small boxes**.
->
-> To partially address this we predict **the square root of the bounding box width and height** instead of the width and height directly
->
-
-> At the training time we only want one bounding box predictor to be responsible for predicting an object based on which prediction has **the highest current IOU** with the ground truth.
->
-> Assign one predictor to be "responsible" for prediction an object based on which prediction has the highest current IOU with the ground truth. <br />
->\* non-maximal suppression adds 2-3% in mAP.[detail](https://docs.google.com/presentation/d/1aeRvtKG21KHdD5lg6Hgyhx5rPq_ZOsGjG5rJ1HP7BbA/pub?start=false&loop=false&delayms=3000&slide=id.g137784ab86_4_1318)
 
 ### Limiations of YOLO
 
