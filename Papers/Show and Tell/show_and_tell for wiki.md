@@ -1,6 +1,7 @@
 # Resources
 * [arXiv](https://arxiv.org/abs/1411.4555)
 * [Youtube, TensorFlow KR 논문읽기 모임](https://www.youtube.com/watch?v=BrmCnoYhQb4&t=0s&index=42&list=PL0oFI08O71gKjGhaWctTPvvM7_cVzsAtK)
+* [Stanford University CS231n_1, Spring 2017, Lecture 10 | Recurrent Neural Networks](https://youtu.be/6niqTuYFZLQ?t=3347)
 
 
 # Abstract
@@ -8,7 +9,7 @@
 * describing the content of an image is a fundamental problem in artificial intelligence that **connects computer vision and natural language processing**.
 * a generaive model based on a **deep recurrent architecture** that ... to generate natural sentences describing an image.
 
-# Introduction
+# 1. Introduction
 
 * a description must **capture** not only **the objects** contained in an image, but it also must express **how these objects relate >to each other** as well as their **attributes and the activities** they are involved in.
 * To express the above semantic knowledge, **a language model** is needed in addition to visual understanding.
@@ -31,7 +32,7 @@
   \* Pascal dataset(BLEU score): 25 to 59 (human performance is 69), Flickr30k: 56 to 66, SBU: 19 to 28)
   
   
-# Related Work
+# 2. Related Work
 1) Mainly for video. systems composed of visual primitive recognizers combine with structured formal language.
     \- heavily hand-designed, relatively brittle and have been demonstrated only limited domain.
 2) Systems dealing with image description were made after some advances in recognition of objects.
@@ -42,7 +43,7 @@
 4) Simillar recurrent NN for was introduced.  These networks use sentences as RNN input whereas Show and Tell use the visual input to the RNN model directly.
   * As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
 
-# Model
+# 3. Model
 
 > Machine translation models make use of a recurrent neural network which **encodes the variable length input** into a fixed dimensional vector, and uses this representation to **“decode” it to the desired output sentence.** <br />
 > Thus, it is natural to use the same approach where, given **an image** (instead of an input sentence in the source language), one applies the same principle of “translating” it into its description.
@@ -65,13 +66,13 @@ NIC에서는 LSTM을 사용하였다. images의 representation을 위해서 CNN�
 
 
 
-### LSTM-based Sentence Generator
+### 3.1 LSTM-based Sentence Generator
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/4.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/5.PNG?raw=true" width="50%" height="50%">
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/LSTM_cs231n.PNG?raw=true" width="50%" height="50%">
-
-\* LSTM에 대한 구체적인 설명은 cs231n 링크로 대체하겠습니다. <br />[Stanford University CS231n, Spring 2017, Lecture 10 | Recurrent Neural Networks](https://youtu.be/6niqTuYFZLQ?t=3347)
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/LSTM_cs231n.PNG?raw=true" width="50%" height="50%">
+\* LSTM에 대한 구체적인 설명은 cs231n 링크로 대체하겠습니다. <br />[Stanford University CS231n_1, Spring 2017, Lecture 10 | Recurrent Neural Networks](https://youtu.be/6niqTuYFZLQ?t=3347)
 
 #### Training
 * The LSTM model is **trained to predict each word of the sentence** after it has **seen the image as well as all preceding words** as defined by **p(S<sub>t</sub>|I, S<sub>0</sub> , ..., S<sub>t-1</sub>)**.
@@ -94,38 +95,87 @@ Our loss is **the sum of the negative log likelihood** of the correct word at ea
 >주어진 이미지로부터 문장을 생성하는 것에는 많은 방법이 있다고 합니다.<br />
 > **Sampling:** we just sample **the first word according to p1**, then provide the corresponding embedding **as input** and sample p2, **continuing like this** until we sample the special end-of-sentence token or some maximum length. <br />
 > **BeamSearch:** iteratively consider the set of the k best sentences up to time t as candidates to generate sentences of size t + 1, and keep only the resulting best k of them.
-#### conditional class probabilities:
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/Beamsearch.PNG?raw=true" width="50%" height="50%">
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/Beamsearch2.PNG?raw=true" width="50%" height="50%">
+\*출처: https://www.oreilly.com/learning/caption-this-with-tensorflow, https://www.youtube.com/watch?v=UXW6Cs82UKo
 
+# 4. Experiments
 
-#### class-specific confidence score:
+### 4.1. Evaluation Mertrics
 
+* The most reliable (but time consuming) is to **ask for raters to give a subjective score** on the usefulness of each desciption given the image.
+* In this paper, we used this to reinforce that some of the automatic metrics indeed correlate with this subjective score.
+* we set up an **Amazon Mechanical Turk experiment**. Each image was rated by **2 workers**.
+* **BLEU score:** a form of precision of word n-grams between generated and reference sentences
+* **Perplexity:** geometric mean of the inverse probability for each predicted world. But they didn't report it.
+* We report two such metrics - METEOR and Cider - hoping for much more discussion and research to arise regarding the choice of metric.
+* transforming the description generation task into a ranking task is unsatisfactory.
+
+### 4.2. Datasets
 
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/9.PNG?raw=true" width="50%" height="50%">
+
+### 4.3 Results
+
+>we wanted to answwer questions such as
+>1) how data size affects generalization
+>2) what kinds of transfer learning it would be able to achieve
+>3) how it would deal with weakly labeled example
+> * performed experiments on five different datasets.
+
+#### 4.3.1 Training Details
+
+* overfitting과의 싸움이 가장 힘들었다. 질이 높은 데이터셋이 100,000장보다 적어서 힘들었다. training set sizes가 커지면 좋아질 것이다.
+* overfitting을 피하기 위해서 pretrained model(e.g., on ImageNet)의 weights로 intialize를 했다.
+* W<sub>e</sub>도 직접 initalize 하려고 했는데, 큰 이점이 없어서 uninitialized 채로 두었다.
+* Dropout과 ensembling이 조금 BLEU를 높였다.
+* fixed learning rate and no momentum.
+* All weights were randomly initialized except for the CNN weights.
+* used 512 dimensions for the embeddings and the size of the LSTM memory.
+* Descriptions were preprocessed with basic tokenization, keeping all words that appeared at least 5 times in the training set.
+
+#### 4.3.2 Generation Results
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/10.PNG?raw=true" width="50%" height="50%">
+
+논문으로 대체하겠습니다.
+
+#### 4.3.3 Transfer learning, Data Size and Label Quality
+
+* transfer learning and data size
+  * Flickr30k로 트레이닝하고 Flickr8k로 테스트했더니 BLEU가 4 points 향상되었다.
+  * MSCOCO는 Flickr30k보다 5배 많은데, 구조가 다르다보니 BLEU는 10 points 하락하였다. 그럼에도 불구하고 descriptions은 잘 되었다.
+  * PASCAL은 공식적인 training set이 없고 Flickr과 MSCOCO와 독립적이다. 역시 데이터셋이 작은 Flickr30k부터의 transfer learning이 더 결과가 안좋았다.
+
+#### 4.3.4 Generation Diversity Discussion
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/11.PNG?raw=true" width="50%" height="50%">
+
+* an obvious question is whether the model generates **novel captions**, and whether the generated captions are both **diverse and high quality**.
+* 위 그림은 Beam search로 찾은 문장들이다. 상위 15개의 생성된 문장들의 스코어가 58로 인간과 비슷하다.
+* 최적의 후보를 선택하면 80%가 예제 문장들이다. 데이터의 양이 적기 때문에 놀랄 일이 아니다.
+* 하지만 상위 15개의 문장을 살펴보면 반 정도가 새로 생성된 문장이다(여전히 BLEU score가 높다). diversity와 quality가 높음을 보여준다.
+
+
+#### 4.3.5 Ranking Results
+
+ranking이 unsatisfactory way라고 생각하지만 많은 paper들이 쓴다. 그래서 했는데 잘한다.
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/12.PNG?raw=true" width="50%" height="50%">
+
+#### 4.3.6 Human Evaluation
+
 <img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/13.PNG?raw=true" width="50%" height="50%">
-
-### Design
-
-
-### Training
-
-#### leaky rectified linear activation:
-
-#### loss function:
-
-#### to remedy this issue, they set Lamda coord, noobj
+* This shows that BLEU is not a perfect metric, as it does not capture well the difference between NIC and human descriptions assessed by raters.
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/human.PNG?raw=true" width="50%" height="50%">
 
 
-### Limiations of YOLO
+#### 4.3.7 Analysis of Embeddings
 
+<img src="https://github.com/Deepest-Project/Greedy-Survey/blob/ys/Papers/Show%20and%20Tell/embedding.PNG?raw=true" width="50%" height="50%">
 
-# Experiments and Results
+임베딩도 잘 된 것을 알 수 있다.
 
+****************************************************************************************************************************************
 
-### VoC 2007 Error Analysis
-
-### Generalization results on Picasso and People-Art
-
-# Discussion
+## 추가자료/Show and Attend and Tell
