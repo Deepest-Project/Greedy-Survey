@@ -159,16 +159,16 @@ Corpus: Google News(About 6B Words)
 
 Training할 때 100M Words, 3 Epochs 보다 300M Words를 1 Epoch 이 더 좋은 성능을 보였음.
 
-![](4.png)
+![](4.PNG)
 
 # Performance
 
-![](5.png)
-![](6.png)
+![](5.PNG)
+![](6.PNG)
 
 # Examples of the Learned Relationships
 
-![](7.png)
+![](7.PNG)
 
 - uranium: plutonium 같은 오답을 볼 수 있다.
 - USA:pizza, 즉 USA를 대표하는 음식이 pizza라는 뜻인데, 이처럼 word vector를 이용하면 쉽게 생각할 수 없는 사실을 유추할 수 있다.
