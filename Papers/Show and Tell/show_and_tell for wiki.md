@@ -34,14 +34,16 @@
   
 # 2. Related Work
 1) Mainly for video. systems composed of visual primitive recognizers combine with structured formal language.
-    \- heavily hand-designed, relatively brittle and have been demonstrated only limited domain.
+    - heavily hand-designed, relatively brittle and have been demonstrated only limited domain.
 2) Systems dealing with image description were made after some advances in recognition of objects.
-    \- These are also limited in their expressivity.
+    - These are also limited in their expressivity.
 3) The idea of co-embedding of images and text in the same vector space. Descriptions are retrieved which lie close to the image in the embedding space.
-    \- do not attempt to generate novel descriptions.
-  * the above approaches cannot describe previously unseen compositions of objects, even though the individual objects might have been observed in the training data.
-4) Simillar recurrent NN for was introduced.  These networks use sentences as RNN input whereas Show and Tell use the visual input to the RNN model directly.
-  * As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
+    - do not attempt to generate novel descriptions. <br />
+    
+> the above approaches cannot describe previously unseen compositions of objects, even though the individual objects might have been observed in the training data. 
+4) Simillar recurrent NN for was introduced.  These networks use sentences as RNN input whereas Show and Tell use the visual input to the RNN model directly. <br />
+
+> As a result of these seemingly insignificant differences, our system achieves substantially better results on the established benchmarks.
 
 # 3. Model
 
